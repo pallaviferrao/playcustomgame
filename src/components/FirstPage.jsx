@@ -29,6 +29,14 @@ const FirstPage = ({ handleGameData }) => {
         socket.emit("start-game", roomDetails, res.data);
       });
   };
-  return <div>{admin ? <button onClick={start}>Start</button> : null}</div>;
+  return (
+    <div>
+      {admin ? (
+        <button onClick={start}>Start</button>
+      ) : (
+        <div>Waitng for Admin to start the game</div>
+      )}
+    </div>
+  );
 };
 export default FirstPage;
