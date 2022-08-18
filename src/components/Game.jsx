@@ -49,7 +49,10 @@ const Game = ({
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify([{ vote: name, roomName: roomName, score: sc }]),
     };
-    fetch("http://localhost:5000/votePerson", createOption).then((res) => {
+    fetch(
+      "https://apple-tart-39767.herokuapp.com/votePerson",
+      createOption
+    ).then((res) => {
       if (!res.waiting) {
         handleIndex(index + 1);
         console.log(res);
