@@ -19,7 +19,7 @@ const Game = ({
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify([{ roomName: roomName }]),
       };
-      fetch("http://localhost:5000/userList", createOption)
+      fetch("https://apple-tart-39767.herokuapp.com/userList", createOption)
         .then((response) => {
           return response.json();
         })
@@ -70,7 +70,7 @@ const Game = ({
         { answers: arr, roomName: roomName, userName: userName, ind: index },
       ]),
     };
-    fetch("http://localhost:5000/submitQuiz", createOption)
+    fetch("https://apple-tart-39767.herokuapp.com/submitQuiz", createOption)
       .then((response) => {
         return response.json();
       })
