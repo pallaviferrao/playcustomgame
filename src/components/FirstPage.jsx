@@ -20,7 +20,7 @@ const FirstPage = ({ handleGameData }) => {
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify([{ room: roomDetails }]),
     };
-    fetch("https://apple-tart-39767.herokuapp.com/startGame2", createOption)
+    fetch("https://customgame.onrender.com/startGame2", createOption)
       .then((response) => {
         return response.json();
       })

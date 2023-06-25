@@ -8,8 +8,10 @@ const Game = ({
   handleIndex,
   handleUserBoard,
 }) => {
-  let gameQuestions = data[0].gameData[index].gameData?.questions;
-  let gameType = data[0].gameData[index].gameData.gameType;
+  console.log(data);
+  let gameOver = data[0].gameData.length <= index ? "gameOver" : null;
+  let gameQuestions = data[0].gameData[index]?.gameData?.questions;
+  let gameType = data[0].gameData[index]?.gameData.gameType;
   const [user, setUser] = useState([]);
   useEffect(() => {
     console.log(gameType);
@@ -19,7 +21,7 @@ const Game = ({
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify([{ roomName: roomName }]),
       };
-      fetch("https://apple-tart-39767.herokuapp.com/userList", createOption)
+      fetch("https://customgame.onrender.com/userList", createOption)
         .then((response) => {
           return response.json();
         })
@@ -36,31 +38,57 @@ const Game = ({
   let answer = gameQuestions?.length;
   let socket = React.useContext(SocketContext);
   let arr = new Array(answer);
-
+  let userPoints = 0;
+  const getPoints = (event) => {
+    userPoints = event;
+  };
   const AddAnswer = (num, event) => {
     arr[num] = event;
   };
   const roomName = React.useContext(RoomContext);
   const userName = React.useContext(UserContext);
+  let roomNameVal = roomName;
   const votePerson = (name) => {
     let sc = 5;
     const createOption = {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify([{ vote: name, roomName: roomName, score: sc }]),
+      body: JSON.stringify([{ vote: name, roomName: roomNameVal, score: sc }]),
     };
-    fetch(
-      "https://apple-tart-39767.herokuapp.com/votePerson",
-      createOption
-    ).then((res) => {
-      if (!res.waiting) {
-        handleIndex(index + 1);
-        console.log(res);
-        handleUserBoard(res.leaderBoard);
-        socket.emit("leaderboard", roomName, res.leaderBoard);
-        navigate("/leaderBoard");
-      }
-    });
+    fetch("https://customgame.onrender.com/votePerson", createOption)
+      .then((response) => {
+        return response.json();
+      })
+      .then((res) => {
+        if (!res.waiting) {
+          handleIndex(index + 1);
+          handleUserBoard(res.leaderBoard);
+          socket.emit("leaderboard", roomName, res.leaderBoard);
+          navigate("/leaderBoard");
+        }
+      });
+  };
+  const addPoints = () => {
+    const createOption = {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify([
+        { userName: userName, roomName: roomName, points: userPoints },
+      ]),
+    };
+    fetch("https://customgame.onrender.com/addPoints", createOption)
+      .then((response) => {
+        return response.json();
+      })
+      .then((res) => {
+        if (!res.waiting) {
+          handleIndex(index + 1);
+          console.log(res);
+          handleUserBoard(res.leaderBoard);
+          socket.emit("leaderboard", roomName, res.leaderBoard);
+          navigate("/leaderBoard");
+        }
+      });
   };
   const sumbitClick = () => {
     const createOption = {
@@ -70,7 +98,7 @@ const Game = ({
         { answers: arr, roomName: roomName, userName: userName, ind: index },
       ]),
     };
-    fetch("https://apple-tart-39767.herokuapp.com/submitQuiz", createOption)
+    fetch("https://customgame.onrender.com/submitQuiz", createOption)
       .then((response) => {
         return response.json();
       })
@@ -86,8 +114,25 @@ const Game = ({
   };
   return (
     <div>
+      <div>{gameOver}</div>
+      <div>{user}</div>
       <div>
-        {gameType !== "Vote" && (
+        {gameType && gameType === "Points" && (
+          <div>
+            <h3>What's your score?</h3>
+            <input
+              type="text"
+              name="answer"
+              onChange={(event) => {
+                getPoints(event.target.value);
+              }}
+            />
+            <button onClick={addPoints}>Add Points</button>
+          </div>
+        )}
+      </div>
+      <div>
+        {gameType && gameType === "Quiz" && (
           <div>
             {gameQuestions.map((e, i) => {
               return (
@@ -112,13 +157,12 @@ const Game = ({
           </div>
         )}
       </div>
-      <div>{user}</div>
       <div>
-        {user.map((e, i) => {
+        {user.map((namePerson, i) => {
           return (
             <div>
-              <div>{e}Name</div>
-              <button onClick={(e) => votePerson(e)}>
+              <div>{namePerson}Name</div>
+              <button onClick={(e) => votePerson(namePerson)}>
                 Vote For this person
               </button>
             </div>

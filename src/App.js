@@ -12,7 +12,7 @@ export const RoomContext = createContext("");
 export const SocketContext = createContext("");
 export const AdminContext = createContext("");
 function App() {
-  const socket = io("https://apple-tart-39767.herokuapp.com");
+  const socket = io("https://customgame.onrender.com/");
   const [user, setUser] = useState("");
   const [room, setRoom] = useState("");
   const [data, setData] = useState({});

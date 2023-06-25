@@ -14,7 +14,7 @@ const LeaderBoard = ({ index }) => {
   const room = React.useContext(RoomContext);
 
   const [users, setUser] = useState({});
-  let name = Object.keys(users);
+  let name = users ? Object.keys(users) : null;
   let navigate = useNavigate();
   socket.on("next-game", (message) => {
     navigate("/game");
@@ -29,7 +29,7 @@ const LeaderBoard = ({ index }) => {
   };
   return (
     <div>
-      {name.map((n) => {
+      {name?.map((n) => {
         return (
           <div>
             <div>{n}</div>

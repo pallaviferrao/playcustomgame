@@ -24,7 +24,7 @@ const Home = ({ handleSetRoom, handleSetUser, handleSetIsAdmin }) => {
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify([{ room: room, user: user }]),
     };
-    fetch("https://apple-tart-39767.herokuapp.com/startGame1", createOption)
+    fetch("https://customgame.onrender.com/startGame1", createOption)
       .then((response) => response.json())
       .then((res1) => {
         handleSetRoom(room);
