@@ -114,8 +114,8 @@ const Game = ({
   };
   return (
     <div>
+      <div>This logged in user is {userName}</div>
       <div>{gameOver}</div>
-      <div>{user}</div>
       <div>
         {gameType && gameType === "Points" && (
           <div>
@@ -161,7 +161,7 @@ const Game = ({
         {user.map((namePerson, i) => {
           return (
             <div>
-              <div>{namePerson}Name</div>
+              <div>{namePerson}</div>
               <button onClick={(e) => votePerson(namePerson)}>
                 Vote For this person
               </button>
